@@ -1,5 +1,6 @@
 namespace RSys
 {
+    
     partial class frmCompanies
     {
         /// <summary>
