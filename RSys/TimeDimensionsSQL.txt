@@ -1,0 +1,37 @@
+﻿
+WITH Mangal as
+(
+SELECT Cast ('2000-01-01' as DateTime) Date --Start Date
+UNION ALL
+SELECT Date + 1
+FROM Mangal
+WHERE Date + 1 < = '2020-12-31' --End date
+)
+
+SELECT Row_Number() OVER (ORDER BY Date) as ID
+,Date
+,YEAR (date) as Year
+,DatePart ( qq, date) as Quarter
+,MONTH (date) as Month_Number_Year
+,DateDiff(mm,DateAdd(qq,DateDiff(qq,0,date),0),date)+1 as Month_Number_Of_Quarter
+,DatePart (wk, Date) as Week_Number_Of_Year
+,datediff(wk,dateadd(qq,datediff(qq,0,date),0),date)+1 as Week_Number_Of_Quarter
+,datediff(wk,dateadd(mm,datediff(mm,0,date),0),date)+1 as Week_Number_Of_Month
+,DatePart (dy, date) as Day_Number_Of_Year
+,datediff(dd,dateadd(qq,datediff(qq,0,date),0),date)+1 as Day_Number_Of_Quarter
+,DAY (date) as Day_Number_Of_Month
+,DatePart (dw, date) as Day_Number_Of_Week
+,DateName (mm, date) as Month_Name
+,LEFT ( DateName (mm, date), 3) Month_Name_Abbreviation
+,DateName (dw, date) as Day_Name
+,LEFT (DateName (dw, date), 3) as Day_Name_Abbreviation
+,CONVERT(VarChar(10),date,112) as YYYYMMDD
+,CONVERT(VarChar(10),date,111) as [YYYY/MM/DD]
+,CONVERT(VarChar(11),date,100) as [mon dd yyyy]
+,CONVERT(VarChar(11),date,120) as [yyyy-mm-dd]
+
+INTO TimeDimension -- Name of the Table
+
+FROM Mangal
+
+OPTION (MAXRECURSION 0)
